@@ -1,0 +1,1425 @@
+<html lang="pt-BR" class="dark"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CyberByte: Code &amp; Conquer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&amp;family=JetBrains+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet">
+  <style>
+    /* ===== RESET & BASE ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0F172A;
+      --bg2:       #131e35;
+      --card:      #162032;
+      --border:    #1e2d45;
+      --primary:   #8B5CF6;
+      --primary30: rgba(139,92,246,0.30);
+      --primary15: rgba(139,92,246,0.15);
+      --primary10: rgba(139,92,246,0.10);
+      --accent:    #00F5FF;
+      --accent20:  rgba(0,245,255,0.20);
+      --accent10:  rgba(0,245,255,0.10);
+      --fg:        #F8FAFC;
+      --muted:     #94a3b8;
+      --success:   #10B981;
+      --error:     #EF4444;
+      --yellow:    #facc15;
+      --orange:    #f97316;
+      --radius:    8px;
+      --font:      'Inter', sans-serif;
+      --mono:      'JetBrains Mono', monospace;
+    }
+
+    html, body { height: 100%; }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--fg);
+      display: flex;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    a { text-decoration: none; color: inherit; }
+    button { cursor: pointer; font-family: var(--font); border: none; }
+    input { font-family: var(--mono); }
+
+    /* ===== SCROLLBAR ===== */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+    /* ===== SIDEBAR ===== */
+    #sidebar {
+      width: 240px;
+      min-width: 240px;
+      background: var(--card);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+    }
+
+    .sidebar-logo {
+      padding: 24px;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--primary);
+      letter-spacing: -0.5px;
+      text-shadow: 0 0 20px var(--primary30);
+    }
+
+    .sidebar-nav { flex: 1; padding: 0 12px; display: flex; flex-direction: column; gap: 4px; }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 14px;
+      border-radius: var(--radius);
+      color: var(--muted);
+      font-weight: 500;
+      font-size: 15px;
+      transition: all 0.2s;
+      border: 1px solid transparent;
+      cursor: pointer;
+    }
+    .nav-link:hover { background: rgba(255,255,255,0.04); color: var(--fg); }
+    .nav-link.active {
+      background: var(--primary10);
+      color: var(--primary);
+      border-color: rgba(139,92,246,0.25);
+      box-shadow: 0 0 15px var(--primary15);
+    }
+    .nav-link svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+    .sidebar-user {
+      padding: 20px 16px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .sidebar-user .avatar-sm {
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      background: var(--border);
+      border: 2px solid var(--primary30);
+      overflow: hidden;
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .avatar-sm svg { width: 22px; height: 22px; color: var(--muted); }
+    .sidebar-user .user-info .lvl { font-size: 13px; font-weight: 600; }
+    .sidebar-user .user-info .role { font-size: 11px; color: var(--muted); }
+
+    /* ===== MAIN CONTENT ===== */
+    #main { flex: 1; overflow-y: auto; }
+    .page { display: none; padding: 32px; max-width: 1100px; margin: 0 auto; }
+    .page.active { display: block; }
+
+    /* ===== XP BAR ===== */
+    .xp-bar-wrap { width: 100%; }
+    .xp-label-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .xp-label { font-size: 13px; color: var(--muted); }
+    .xp-value { font-size: 13px; font-weight: 700; color: var(--accent); font-family: var(--mono); }
+    .xp-track {
+      height: 10px;
+      background: rgba(0,0,0,0.4);
+      border-radius: 999px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .xp-fill {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 999px;
+      box-shadow: 0 0 12px rgba(0,245,255,0.7);
+      position: relative;
+      transition: width 1s ease-out;
+    }
+    .xp-fill::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to right, transparent, rgba(255,255,255,0.3));
+    }
+
+    /* ===== BO ===== */
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+      padding: 10px 22px;
+      border-radius: var(--radius);
+      font-size: 15px;
+      font-weight: 600;
+      box-shadow: 0 0 15px var(--primary30);
+      transition: all 0.2s;
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .btn-primary:hover { background: #7c4fe0; box-shadow: 0 0 25px var(--primary30); }
+    .btn-primary:active { transform: scale(0.97); }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      padding: 10px 22px;
+      border-radius: var(--radius);
+      font-size: 15px;
+      font-weight: 600;
+      box-shadow: 0 0 12px var(--accent10);
+      transition: all 0.2s;
+    }
+    .btn-outline:hover { background: var(--accent10); box-shadow: 0 0 20px var(--accent20); }
+
+    .btn-success {
+      background: var(--success);
+      color: #fff;
+      padding: 10px 22px;
+      border-radius: var(--radius);
+      font-size: 15px; font-weight: 600;
+      box-shadow: 0 0 15px rgba(16,185,129,0.35);
+      transition: all 0.2s;
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .btn-error {
+      background: transparent;
+      color: var(--error);
+      border: 1px solid var(--error);
+      padding: 10px 22px;
+      border-radius: var(--radius);
+      font-size: 15px; font-weight: 600;
+      transition: all 0.2s;
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .btn-error:hover { background: rgba(239,68,68,0.1); }
+
+    /* ===== CARDS ===== */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+
+    /* ===== BADGE ===== */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 3px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      border: 1px solid;
+      backdrop-filter: blur(8px);
+    }
+    .badge-beginner  { color: var(--success); border-color: rgba(16,185,129,0.3); background: rgba(16,185,129,0.1); }
+    .badge-intermediate { color: var(--yellow); border-color: rgba(250,204,21,0.3); background: rgba(250,204,21,0.1); }
+    .badge-advanced  { color: var(--error);   border-color: rgba(239,68,68,0.3);  background: rgba(239,68,68,0.1);  }
+
+    .tag-lang {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-family: var(--mono);
+      color: var(--accent);
+      background: var(--accent10);
+      border: 1px solid rgba(0,245,255,0.2);
+    }
+
+    /* ========== PAGE: HOME ========== */
+    .hero {
+      position: relative;
+      overflow: hidden;
+      border-radius: 14px;
+      border: 1px solid rgba(139,92,246,0.25);
+      background: var(--card);
+      padding: 40px;
+      margin-bottom: 40px;
+      box-shadow: 0 0 40px var(--primary15);
+    }
+    .hero::before {
+      content: '';
+      position: absolute; top: -50%; right: -10%;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, var(--primary30), transparent 70%);
+      pointer-events: none;
+    }
+    .hero::after {
+      content: '';
+      position: absolute; bottom: -50%; left: -10%;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, var(--accent10), transparent 70%);
+      pointer-events: none;
+    }
+    .hero-content { position: relative; z-index: 1; max-width: 600px; }
+    .hero h1 { font-size: 42px; font-weight: 700; line-height: 1.15; margin-bottom: 14px; }
+    .hero h1 .gradient {
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      background-clip: text;
+      -webkit-background-clip: text; 
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 0 10px var(--primary30));
+    }
+    .hero p { font-size: 16px; color: var(--muted); line-height: 1.65; margin-bottom: 28px; }
+    .hero-btns { display: flex; gap: 14px; flex-wrap: wrap; }
+
+    .section-title {
+      font-size: 22px; font-weight: 700;
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 24px;
+    }
+    .section-title-bar {
+      width: 4px; height: 28px;
+      background: var(--accent);
+      border-radius: 2px;
+      box-shadow: 0 0 10px rgba(0,245,255,0.6);
+    }
+
+    .quest-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 22px;
+    }
+
+    .quest-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      transition: all 0.3s;
+      animation: fadeUp 0.5s ease both;
+    }
+    .quest-card:hover {
+      border-color: rgba(139,92,246,0.5);
+      box-shadow: 0 0 25px var(--primary15);
+      transform: translateY(-2px);
+    }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+    .quest-img {
+      height: 160px;
+      position: relative;
+      overflow: hidden;
+      border-bottom: 1px solid var(--border);
+    }
+    .quest-img-bg {
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 60px;
+      position: relative;
+    }
+    .quest-img-gradient {
+      position: absolute; bottom: 0; left: 0; right: 0; height: 60px;
+      background: linear-gradient(to top, var(--card), transparent);
+    }
+    .quest-badge-pos {
+      position: absolute; top: 10px; right: 10px; z-index: 2;
+    }
+    .quest-body { padding: 18px; }
+    .quest-body h3 { font-size: 17px; font-weight: 700; margin: 8px 0 18px; }
+    .quest-start {
+      display: block; width: 100%;
+      text-align: center;
+      padding: 10px;
+      background: var(--primary);
+      color: #fff;
+      border-radius: var(--radius);
+      font-weight: 600;
+      font-size: 14px;
+      transition: all 0.2s;
+      box-shadow: 0 0 0 transparent;
+    }
+    .quest-start:hover { box-shadow: 0 0 18px var(--primary30); }
+
+    /* ========== PAGE: ARENA ========== */
+    .arena-wrap { max-width: 860px; margin: 0 auto; }
+
+    .arena-header {
+      display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 16px;
+      margin-bottom: 24px;
+    }
+    .arena-meta { display: flex; align-items: center; gap: 12px; margin-bottom: 4px; }
+    .arena-title { font-size: 24px; font-weight: 700; }
+    .arena-xp-wrap { min-width: 240px; }
+
+    .code-block {
+      background: #0F172A;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      font-family: var(--mono);
+      font-size: 14px;
+      line-height: 1.8;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+    .code-block::before {
+      content: '';
+      position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+      background: var(--accent);
+      opacity: 0.6;
+    }
+    .code-kw  { color: var(--primary); }
+    .code-str { color: #86efac; }
+    .code-fn  { color: #f472b6; }
+    .code-num { color: #fb923c; }
+    .code-cm  { color: #64748b; }
+
+    .code-input {
+      display: inline-block;
+      background: #1e293b;
+      border: none;
+      border-bottom: 2px solid rgba(0,245,255,0.5);
+      color: var(--accent);
+      font-family: var(--mono);
+      font-size: 14px;
+      padding: 1px 6px;
+      margin: 0 2px;
+      text-align: center;
+      transition: all 0.2s;
+      outline: none;
+    }
+    .code-input:focus {
+      border-bottom-color: var(--accent);
+      background: rgba(0,245,255,0.05);
+      box-shadow: 0 0 10px rgba(0,245,255,0.15);
+    }
+    .code-input.correct { border-bottom-color: var(--success); color: var(--success); background: rgba(16,185,129,0.08); }
+    .code-input.wrong   { border-bottom-color: var(--error);   color: var(--error);   background: rgba(239,68,68,0.08); }
+
+    .options-row { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 24px; }
+    .opt-btn {
+      padding: 8px 18px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--fg);
+      border-radius: var(--radius);
+      font-family: var(--mono);
+      font-size: 13px;
+      transition: all 0.2s;
+    }
+    .opt-btn:hover:not(:disabled) { border-color: rgba(0,245,255,0.5); color: var(--accent); }
+    .opt-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .arena-actions {
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;
+    }
+    .feedback-msg { display: flex; align-items: center; gap: 8px; font-weight: 700; }
+    .feedback-success { color: var(--success); }
+    .feedback-error   { color: var(--error); }
+
+    .progress-dots { display: flex; gap: 6px; }
+    .progress-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--border); transition: all 0.3s;
+    }
+    .progress-dot.done { background: var(--success); box-shadow: 0 0 6px rgba(16,185,129,0.6); }
+    .progress-dot.current { background: var(--accent); box-shadow: 0 0 6px rgba(0,245,255,0.6); }
+
+    /* ========== PAGE: PROFILE ========== */
+    .profile-grid { display: grid; grid-template-columns: 280px 1fr; gap: 28px; }
+    @media (max-width: 768px) { .profile-grid { grid-template-columns: 1fr; } }
+
+    .profile-card {
+      padding: 28px;
+      display: flex; flex-direction: column; align-items: center; text-align: center;
+    }
+    .avatar-lg {
+      width: 110px; height: 110px; border-radius: 50%;
+      border: 3px solid rgba(139,92,246,0.5);
+      box-shadow: 0 0 25px var(--primary30);
+      background: var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 50px;
+      margin-bottom: 20px;
+      position: relative;
+    }
+    .lvl-badge {
+      position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%);
+      background: var(--accent);
+      color: #0F172A;
+      font-family: var(--mono);
+      font-size: 11px; font-weight: 700;
+      padding: 2px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      box-shadow: 0 0 10px rgba(0,245,255,0.5);
+      white-space: nowrap;
+    }
+    .profile-name { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+    .profile-handle { font-size: 13px; color: var(--muted); font-family: var(--mono); margin-bottom: 24px; }
+
+    .stats-list { width: 100%; display: flex; flex-direction: column; gap: 0; }
+    .stat-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 14px;
+    }
+    .stat-row:last-child { border-bottom: none; }
+    .stat-label { display: flex; align-items: center; gap: 8px; color: var(--muted); }
+    .stat-val { font-family: var(--mono); font-weight: 700; }
+
+    .achievements-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 14px; margin-bottom: 32px; }
+    .ach-badge {
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      padding: 16px 10px;
+      border-radius: var(--radius);
+      background: rgba(255,255,255,0.03);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border);
+      transition: border-color 0.2s;
+    }
+    .ach-badge:hover { border-color: rgba(0,245,255,0.4); }
+    .ach-icon {
+      width: 46px; height: 46px; border-radius: 50%;
+      background: var(--accent10);
+      border: 1px solid rgba(0,245,255,0.3);
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 0 10px rgba(0,245,255,0.15);
+      font-size: 22px;
+    }
+    .ach-title { font-size: 11px; font-weight: 600; text-align: center; color: var(--muted); }
+
+    .activity-list { display: flex; flex-direction: column; }
+    .activity-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 18px;
+      border-bottom: 1px solid rgba(30,45,69,0.6);
+    }
+    .activity-item:last-child { border-bottom: none; }
+    .activity-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-right: 14px;
+    }
+    .activity-dot.mission { background: var(--primary); box-shadow: 0 0 6px var(--primary30); }
+    .activity-dot.badge   {background: var(--accent);box-shadow: 0 0 6px rgba(0,245,255,0.5);}
+    .activity-info { flex: 1; }
+    .activity-title { font-size: 14px; font-weight: 500; }
+    .activity-time  { font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .activity-xp { font-family: var(--mono); font-size: 13px; font-weight: 700; color: var(--success); }
+
+    /* ========== PAGE: LEADERBOARD ========== */
+    .lb-header { display: flex; align-items: center; gap: 16px; margin-bottom: 32px; }
+    .lb-icon-wrap {
+      width: 52px; height: 52px;
+      background: var(--primary10);
+      border: 1px solid rgba(139,92,246,0.4);
+      border-radius: var(--radius);
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 0 15px var(--primary15);
+    }
+    .lb-title { font-size: 28px; font-weight: 700; }
+    .lb-subtitle { font-size: 14px; color: var(--muted); }
+
+    .lb-table-head {
+      display: grid;
+      grid-template-columns: 60px 1fr 90px 100px 90px;
+      gap: 12px;
+      padding: 12px 20px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(255,255,255,0.02);
+      font-size: 11px; font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .lb-row {
+      display: grid;
+      grid-template-columns: 60px 1fr 90px 100px 90px;
+      gap: 12px;
+      padding: 14px 20px;
+      border-bottom: 1px solid rgba(30,45,69,0.5);
+      align-items: center;
+      transition: background 0.2s;
+      animation: fadeUp 0.4s ease both;
+    }
+    .lb-row:last-child { border-bottom: none; }
+    .lb-row:hover { background: rgba(255,255,255,0.02); }
+    .lb-row.me { background: rgba(139,92,246,0.05); border-left: 2px solid var(--primary); }
+
+    .rank-num {
+      width: 34px; height: 34px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--mono); font-size: 13px; font-weight: 700;
+      margin: 0 auto;
+    }
+    .rank-1 { background: rgba(250,204,21,0.15); color: var(--yellow); border: 1px solid rgba(250,204,21,0.4); box-shadow: 0 0 10px rgba(250,204,21,0.3); }
+    .rank-2 { background: rgba(148,163,184,0.15); color: #cbd5e1; border: 1px solid rgba(148,163,184,0.4); }
+    .rank-3 { background: rgba(180,120,60,0.15); color: #d97706; border: 1px solid rgba(180,120,60,0.4); }
+    .rank-n { background: rgba(255,255,255,0.05); color: var(--muted); border: 1px solid var(--border); }
+
+    .lb-name { font-weight: 500; display: flex; align-items: center; gap: 8px; }
+    .lb-name.me-name { color: var(--primary); text-shadow: 0 0 8px var(--primary30); }
+    .me-tag { font-size: 10px; background: var(--primary10); color: var(--primary); border: 1px solid rgba(139,92,246,0.3); padding: 2px 7px; border-radius: 3px; text-transform: uppercase; letter-spacing: 0.05em; }
+    .lb-lvl { font-family: var(--mono); font-size: 13px; color: var(--accent); text-align: center; }
+    .lb-xp  { font-family: var(--mono); font-size: 13px; text-align: right; }
+    .lb-streak { display: flex; justify-content: flex-end; align-items: center; gap: 5px; font-family: var(--mono); font-size: 13px; color: var(--orange); }
+
+    /* ===== NOTIFICATION TOAST ===== */
+    #toast {
+      position: fixed; bottom: 28px; right: 28px;
+      padding: 14px 22px;
+      border-radius: var(--radius);
+      font-weight: 600; font-size: 14px;
+      transform: translateY(80px); opacity: 0;
+      transition: all 0.35s cubic-bezier(0.34,1.56,0.64,1);
+      z-index: 9999;
+      display: flex; align-items: center; gap: 10px;
+    }
+    #toast.show { transform: translateY(0); opacity: 1; }
+    #toast.success { background: rgba(16,185,129,0.15); border: 1px solid rgba(16,185,129,0.4); color: var(--success); box-shadow: 0 0 20px rgba(16,185,129,0.2); }
+    #toast.error   { background: rgba(239,68,68,0.15);  border: 1px solid rgba(239,68,68,0.4);  color: var(--error);   box-shadow: 0 0 20px rgba(239,68,68,0.2); }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 640px) {
+      #sidebar { display: none; }
+      .page { padding: 20px 16px; }
+      .hero { padding: 24px; }
+      .hero h1 { font-size: 28px; }
+      .lb-table-head, .lb-row { grid-template-columns: 50px 1fr 70px; }
+      .lb-table-head > *:nth-child(4),
+      .lb-table-head > *:nth-child(5),
+      .lb-row > *:nth-child(4),
+      .lb-row > *:nth-child(5) { display: none; }
+    }
+
+    /* ===== UTIL ===== */
+    .hidden { display: none !important; }
+    .mb-4 { margin-bottom: 16px; }
+    .mb-8 { margin-bottom: 32px; }
+    .flex { display: flex; }
+    .gap-3 { gap: 12px; }
+    .items-center { align-items: center; }
+  </style>
+<style type="text/css" id="operaUserStyle">
+  video {
+    filter: -opera-shader(url(data:text/plain;base64,Ly8gaHR0cHM6Ly9naXRodWIuY29tL0dQVU9wZW4tRWZmZWN0cy9GaWRlbGl0eUZYLUNBUwovLyB2MwoKdW5pZm9ybSBzaGFkZXIgaUNodW5rOwp1bmlmb3JtIGZsb2F0MiBpTW91c2U7CnVuaWZvcm0gZmxvYXQ0IGlWaXNpYmxlUmVjdDsKdW5pZm9ybSBmbG9hdCBpQXJnc1sxXTsKCmNvbnN0IGZsb2F0IEVQU0lPTiA9IDAuMTsKY29uc3QgZmxvYXQgVl9NSU4gPSAwOwpjb25zdCBmbG9hdCBWX0xPVyA9IDAuMjU7CmNvbnN0IGZsb2F0IFZfTUVEID0gMC41Owpjb25zdCBmbG9hdCBWX0hJR0ggPSAwLjc1Owpjb25zdCBmbG9hdCBWX01BWCA9IDE7Cgpjb25zdCBmbG9hdCBUSFJFU0hPTERfQVJFQSA9IDgwMCAqIDYwMDsKY29uc3QgZmxvYXQgTUlOX0FSRUEgPSA0MDAgKiAxMDA7CmNvbnN0IGZsb2F0IE1JTl9TVFJJUCA9IDIwOwpjb25zdCBmbG9hdCBNQVJHSU4gPSAxOwoKaW5saW5lIGZsb2F0MyBwaXhlbChmbG9hdDIgeHksIGZsb2F0MiBvZmZzZXQpIHsKICAgIHJldHVybiBpQ2h1bmsuZXZhbCh4eSArIG9mZnNldCkucmdiOwp9CgppbmxpbmUgZmxvYXQzIHNoYXJwZW4oZmxvYXQyIHh5KSB7CiAgICBmbG9hdDMgZiA9CiAgICAgICAgcGl4ZWwoeHksIGZsb2F0MigtMSwgLTEpKSAqICAxICsKICAgICAgICBwaXhlbCh4eSwgZmxvYXQyKCAwLCAtMSkpICogLTEgKwogICAgICAgIHBpeGVsKHh5LCBmbG9hdDIoIDEsIC0xKSkgKiAgMSArCgogICAgICAgIHBpeGVsKHh5LCBmbG9hdDIoLTEsIDApKSAqIC0xICArCiAgICAgICAgcGl4ZWwoeHksIGZsb2F0MiggMCwgMCkpICogLTEgICsKICAgICAgICBwaXhlbCh4eSwgZmxvYXQyKCAxLCAwKSkgKiAtMSAgKwoKICAgICAgICBwaXhlbCh4eSwgZmxvYXQyKC0xLCAxKSkgKiAxICAgKwogICAgICAgIHBpeGVsKHh5LCBmbG9hdDIoIDAsIDEpKSAqIC0xICArCiAgICAgICAgcGl4ZWwoeHksIGZsb2F0MiggMSwgMSkpICogMTsKICAgIHJldHVybiBmIC8gLTE7Cn0KCmZsb2F0NCBSR1gyKGZsb2F0MiB4eSkgewogICAgZmxvYXQyIGNodW5rX3NpemUgPSBpVmlzaWJsZVJlY3Quenc7CiAgICBmbG9hdDQgY29sb3IgPSBpQ2h1bmsuZXZhbCh4eSk7CgogICAgaWYgKGNodW5rX3NpemUueCAqIGNodW5rX3NpemUueSA8IE1JTl9BUkVBKSB7CiAgICAgICAgcmV0dXJuIGNvbG9yOwogICAgfQoKICAgIGlmIChjaHVua19zaXplLnkgPCBNSU5fU1RSSVAgfHwgY2h1bmtfc2l6ZS54IDwgTUlOX1NUUklQKSB7CiAgICAgICAgcmV0dXJuIGNvbG9yOwogICAgfQoKICAgIGlmICh4eS54IDwgTUFSR0lOIHx8IHh5LnggPiAoY2h1bmtfc2l6ZS54IC0gTUFSR0lOKSB8fAogICAgICAgIHh5LnkgPCBNQVJHSU4gfHwgeHkueSA+IChjaHVua19zaXplLnkgLSBNQVJHSU4pKSB7CiAgICAgICAgcmV0dXJuIGNvbG9yOwogICAgfQoKICAgIHJldHVybiBmbG9hdDQoc2hhcnBlbih4eSksIDEpOwp9CgppbmxpbmUgZmxvYXQzIG1pbjN2KGZsb2F0MyB4LCBmbG9hdDMgeSwgZmxvYXQzIHopIHsKCXJldHVybiBtaW4oeCwgbWluKHksIHopKTsKfQoKaW5saW5lIGZsb2F0MyBtYXgzdihmbG9hdDMgeCwgZmxvYXQzIHksIGZsb2F0MyB6KSB7CglyZXR1cm4gbWF4KHgsIG1heCh5LCB6KSk7Cn0KCmZsb2F0MyBSR1gzKGZsb2F0MiB4eSwgZmxvYXQgc3RyZW5ndGgpIHsKICAgIGZsb2F0MyBhID0gcGl4ZWwoeHksIGZsb2F0MigtMSwgLTEpKTsKICAgIGZsb2F0MyBiID0gcGl4ZWwoeHksIGZsb2F0MiggMCwgLTEpKTsKICAgIGZsb2F0MyBjID0gcGl4ZWwoeHksIGZsb2F0MiggMSwgLTEpKTsKCiAgICBmbG9hdDMgZCA9IHBpeGVsKHh5LCBmbG9hdDIoLTEsIDApKTsKICAgIGZsb2F0MyBlID0gcGl4ZWwoeHksIGZsb2F0MiggMCwgMCkpOwogICAgZmxvYXQzIGYgPSBwaXhlbCh4eSwgZmxvYXQyKCAxLCAwKSk7CgogICAgZmxvYXQzIGcgPSBwaXhlbCh4eSwgZmxvYXQyKC0xLCAxKSk7CiAgICBmbG9hdDMgaCA9IHBpeGVsKHh5LCBmbG9hdDIoIDAsIDEpKTsKICAgIGZsb2F0MyBpID0gcGl4ZWwoeHksIGZsb2F0MiggMSwgMSkpOwoKICAgIGZsb2F0MyBtaW5fZGVmID0gbWluM3YoZCwgZSwgZik7CiAgICBmbG9hdDMgbWluX2JkZWZoID0gbWluM3YoYiwgbWluX2RlZiwgaCk7CiAgICBmbG9hdDMgbWluX2FiY2RmZ2hpID0gbWluM3YobWluM3YoYSwgbWluX2JkZWZoLCBjKSwgZywgaSk7CiAgICBmbG9hdDMgbWluM19mYWN0b3IgPSBtaW5fYmRlZmggKyBtaW5fYWJjZGZnaGk7CgogICAgZmxvYXQzIG1heF9kZWYgPSBtYXgzdihkLCBlLCBmKTsKICAgIGZsb2F0MyBtYXhfYmRlZmggPSBtYXgzdihiLCBtYXhfZGVmLCBoKTsKICAgIGZsb2F0MyBtYXhfYWJjZGZnaGkgPSBtYXgzdihtYXgzdihhLCBtaW5fYmRlZmgsIGMpLCBnLCBpKTsKICAgIGZsb2F0MyBtYXgzX2ZhY3RvciA9IG1heF9iZGVmaCArIG1heF9hYmNkZmdoaTsKCiAgICBmbG9hdDMgZmFjdG9yID0gMS4wIC8gbWF4M19mYWN0b3I7CgogICAgZmxvYXQzIGFtcCA9IHNhdHVyYXRlKG1pbihtaW4zX2ZhY3RvciwgMiAtIG1heDNfZmFjdG9yKSAqIGZhY3Rvcik7CiAgICBmbG9hdDMgYW1wX3NxcnQgPSBzcXJ0KGFtcCk7CgogICAgZmxvYXQgcGVhayA9IC0xLjAgLyAobWl4KDgsIDUsIHN0cmVuZ3RoKSk7CgogICAgZmxvYXQzIGNyb3NzX3dlaWdodHMgPSBhbXBfc3FydCAqIHBlYWs7CiAgICBmbG9hdDMgd2VpZ2h0cyA9IDEgLyAoMSArIDQgKiBjcm9zc193ZWlnaHRzKTsKCiAgICBmbG9hdDMgcmVzdWx0ID0gKChiICsgZCArIGYgKyBoKSAqIGNyb3NzX3dlaWdodHMgKyBlKSAqIHdlaWdodHM7CgogICAgcmV0dXJuIHNhdHVyYXRlKHJlc3VsdCk7Cn0KCmZsb2F0NCBtYWluKGZsb2F0MiB4eSkgewoKICAgIGZsb2F0NCBvcmlnaW5hbENvbG9yID0gaUNodW5rLmV2YWwoeHkpOwogICAgaWYgKG9yaWdpbmFsQ29sb3IuYSA8IDEpIHsKICAgICAgICByZXR1cm4gaUNodW5rLmV2YWwoeHkpOwogICAgfQoKICAgIGZsb2F0IGludGVuc2l0eSA9IGlBcmdzWzBdOwogICAgZmxvYXQgc3RyZW5ndGggPSAwOwogICAgZmxvYXQzIGNvbG9yOwoKICAgIGlmIChpbnRlbnNpdHkgPCBWX01JTiArIEVQU0lPTikgewogICAgICAgIHN0cmVuZ3RoID0gMC4xMDsKICAgICAgICBjb2xvciA9IFJHWDMoeHksIHN0cmVuZ3RoKTsKCiAgICB9IGVsc2UgaWYgKGludGVuc2l0eSA+IFZfTE9XIC0gRVBTSU9OICYmIGludGVuc2l0eSA8IFZfTE9XICsgRVBTSU9OKSB7CiAgICAgICAgc3RyZW5ndGggPSAwLjMzOwogICAgICAgIGNvbG9yID0gUkdYMyh4eSwgc3RyZW5ndGgpOwoKICAgIH0gZWxzZSBpZiAoaW50ZW5zaXR5ID4gVl9NRUQgLSBFUFNJT04gJiYgaW50ZW5zaXR5IDwgVl9NRUQgKyBFUFNJT04pIHsKICAgICAgICBzdHJlbmd0aCA9IDAuNTsKICAgICAgICBjb2xvciA9IFJHWDMoeHksIHN0cmVuZ3RoKTsKCiAgICB9IGVsc2UgaWYgKGludGVuc2l0eSA+IFZfSElHSCAtIEVQU0lPTiAmJiBpbnRlbnNpdHkgPCBWX0hJR0ggKyBFUFNJT04pIHsKICAgICAgICBzdHJlbmd0aCA9IDAuOTk7CiAgICAgICAgY29sb3IgPSBSR1gzKHh5LCBzdHJlbmd0aCk7CgogICAgfSBlbHNlIGlmIChpbnRlbnNpdHkgPiBWX01BWCAtIEVQU0lPTikgewogICAgICAgIHN0cmVuZ3RoID0gMTsKICAgICAgICBjb2xvciA9IFJHWDIoeHkpLnJnYjsKICAgIH0KCiAgICByZXR1cm4gZmxvYXQ0KGNvbG9yLCBvcmlnaW5hbENvbG9yLmEpOwp9) -opera-args(0.50 calc(env(-opera-accent-color-r, 255)/255) calc(env(-opera-accent-color-g, 255)/255) calc(env(-opera-accent-color-b, 255)/255)));
+  }
+</style><style type="text/css"></style><style type="text/css"></style><style type="text/css"></style></head>
+<body>
+
+<!-- ======================== SIDEBAR ======================== -->
+<aside id="sidebar">
+  <div class="sidebar-logo">CyberByte</div>
+  <nav class="sidebar-nav">
+    <a class="nav-link" data-page="home" onclick="navigate('home',this)">
+      <!-- Home icon -->
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+      Hub
+    </a>
+    <a class="nav-link active" data-page="arena" onclick="navigate('arena',this)">
+      <!-- Code icon -->
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+      Arena
+    </a>
+    <a class="nav-link" data-page="leaderboard" onclick="navigate('leaderboard',this)">
+      <!-- Trophy icon -->
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path></svg>
+      Leaderboard
+    </a>
+    <a class="nav-link" data-page="profile" onclick="navigate('profile',this)">
+      <!-- User icon -->
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+      Profile
+    </a>
+  </nav>
+  <div class="sidebar-user">
+    <div class="avatar-sm">
+      <img src="img/avatar.png" alt="Avatar" style="width:100%; height:100%; object-fit: cover;">
+    </div>
+    <div class="user-info">
+      <div class="lvl">Lvl 12</div>
+      <div class="role">Cyber Hacker</div>
+    </div>
+  </div>
+</aside>
+
+<!-- ======================== MAIN ======================== -->
+<div id="main">
+
+  <!-- ======== PAGE: HOME ======== -->
+  <div id="page-home" class="page">
+    <section class="hero">
+      <div class="hero-content">
+        <h1>Welcome to <span class="gradient">CyberByte</span></h1>
+        <p>Jack in e suba de nível com suas habilidades de código. Complete missões, ganhe XP e conquiste o leaderboard no arcade definitivo dos desenvolvedores.</p>
+        <div class="hero-btns">
+          <button class="btn-primary" onclick="navigate('arena',document.querySelector('[data-page=arena]'))">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            Quick Start
+          </button>
+          <button class="btn-outline" onclick="navigate('leaderboard',document.querySelector('[data-page=leaderboard]'))">Ver Ranking</button>
+        </div>
+      </div>
+    </section>
+
+    <h2 class="section-title">
+      <span class="section-title-bar"></span>
+      Missões Disponíveis
+    </h2>
+
+    <div class="quest-grid" id="quest-grid">
+    <div class="quest-card" style="animation-delay:0s" onclick="navigate('arena',document.querySelector('[data-page=arena]'))">
+      <div class="quest-img">
+        <div class="quest-img-bg">
+          <img src="img/python-quest.png" alt="Python: Data &amp; Variáveis" style="width:100%; height:100%; object-fit: cover;">
+        </div>
+        <div class="quest-img-gradient"></div>
+        <div class="quest-badge-pos"><span class="badge badge-beginner">Beginner</span></div>
+      </div>
+      <div class="quest-body">
+        <span class="tag-lang">Python</span>
+        <h3>Python: Data &amp; Variáveis</h3>
+        <a class="quest-start" href="#" onclick="event.preventDefault();navigate('arena',document.querySelector('[data-page=arena]'))">
+          Iniciar Missão
+        </a>
+      </div>
+    </div>
+  
+    <div class="quest-card" style="animation-delay:0.08s" onclick="navigate('arena',document.querySelector('[data-page=arena]'))">
+      <div class="quest-img">
+        <div class="quest-img-bg">
+          <img src="img/js-quest.png" alt="JavaScript: Infinity Loops" style="width:100%; height:100%; object-fit: cover;">
+        </div>
+        <div class="quest-img-gradient"></div>
+        <div class="quest-badge-pos"><span class="badge badge-beginner">Beginner</span></div>
+      </div>
+      <div class="quest-body">
+        <span class="tag-lang">JavaScript</span>
+        <h3>JavaScript: Infinity Loops</h3>
+        <a class="quest-start" href="#" onclick="event.preventDefault();navigate('arena',document.querySelector('[data-page=arena]'))">
+          Iniciar Missão
+        </a>
+      </div>
+    </div>
+  
+    <div class="quest-card" style="animation-delay:0.16s" onclick="navigate('arena',document.querySelector('[data-page=arena]'))">
+      <div class="quest-img">
+        <div class="quest-img-bg">
+          <img src="img/react-quest.png" alt="React: O Poder do State" style="width:100%; height:100%; object-fit: cover;">
+        </div>
+        <div class="quest-img-gradient"></div>
+        <div class="quest-badge-pos"><span class="badge badge-intermediate">Intermediate</span></div>
+      </div>
+      <div class="quest-body">
+        <span class="tag-lang">React</span>
+        <h3>React: O Poder do State</h3>
+        <a class="quest-start" href="#" onclick="event.preventDefault();navigate('arena',document.querySelector('[data-page=arena]'))">
+          Iniciar Missão
+        </a>
+      </div>
+    </div>
+  
+    <div class="quest-card" style="animation-delay:0.24s" onclick="navigate('arena',document.querySelector('[data-page=arena]'))">
+      <div class="quest-img">
+        <div class="quest-img-bg">
+          <img src="img/ts-quest.png" alt="TypeScript: Async Await" style="width:100%; height:100%; object-fit: cover;">
+        </div>
+        <div class="quest-img-gradient"></div>
+        <div class="quest-badge-pos"><span class="badge badge-intermediate">Intermediate</span></div>
+      </div>
+      <div class="quest-body">
+        <span class="tag-lang">TypeScript</span>
+        <h3>TypeScript: Async Await</h3>
+        <a class="quest-start" href="#" onclick="event.preventDefault();navigate('arena',document.querySelector('[data-page=arena]'))">
+          Iniciar Missão
+        </a>
+      </div>
+    </div>
+  
+    <div class="quest-card" style="animation-delay:0.32s" onclick="navigate('arena',document.querySelector('[data-page=arena]'))">
+      <div class="quest-img">
+        <div class="quest-img-bg">
+          <img src="img/cpp-quest.png" alt="C++: Profundezas Recursivas" style="width:100%; height:100%; object-fit: cover;">
+        </div>
+        <div class="quest-img-gradient"></div>
+        <div class="quest-badge-pos"><span class="badge badge-advanced">Advanced</span></div>
+      </div>
+      <div class="quest-body">
+        <span class="tag-lang">C++</span>
+        <h3>C++: Profundezas Recursivas</h3>
+        <a class="quest-start" href="#" onclick="event.preventDefault();navigate('arena',document.querySelector('[data-page=arena]'))">
+          Iniciar Missão
+        </a>
+      </div>
+    </div>
+  
+    <div class="quest-card" style="animation-delay:0.4s" onclick="navigate('arena',document.querySelector('[data-page=arena]'))">
+      <div class="quest-img">
+        <div class="quest-img-bg">
+          <img src="img/rust-quest.png" alt="Rust: Memória Segura" style="width:100%; height:100%; object-fit: cover;">
+        </div>
+        <div class="quest-img-gradient"></div>
+        <div class="quest-badge-pos"><span class="badge badge-advanced">Advanced</span></div>
+      </div>
+      <div class="quest-body">
+        <span class="tag-lang">Rust</span>
+        <h3>Rust: Memória Segura</h3>
+        <a class="quest-start" href="#" onclick="event.preventDefault();navigate('arena',document.querySelector('[data-page=arena]'))">
+          Iniciar Missão
+        </a>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <!-- ======== PAGE: ARENA ======== -->
+  <div id="page-arena" class="page active">
+    <div class="arena-wrap">
+      <div class="arena-header">
+        <div>
+          <div class="arena-meta">
+            <span class="tag-lang" id="arena-lang">JavaScript</span>
+            <span style="font-size:13px;color:var(--muted);font-weight:500" id="arena-progress">Missão 1/3</span>
+          </div>
+          <div class="arena-title" id="arena-title">Array Iteration</div>
+        </div>
+        <div class="arena-xp-wrap">
+          <div class="xp-bar-wrap">
+            <div class="xp-label-row">
+              <span class="xp-label">XP Atual</span>
+              <span class="xp-value" id="arena-xp-label">750 / 1000 XP</span>
+            </div>
+            <div class="xp-track"><div class="xp-fill" id="arena-xp-bar" style="width:75%"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card code-block" id="arena-code"><pre style="white-space:pre-wrap;line-height:1.8"><span class="code-kw">const</span> fruits = [<span class="code-str">'apple'</span>, <span class="code-str">'banana'</span>, <span class="code-str">'cherry'</span>];
+
+fruits.<input autocomplete="off" data-testid="input-code-gap" placeholder="" style="width:8ch" data-expected="forEach" class="code-input" id="code-gap">(fruit <span class="code-fn">=&gt;</span> {
+  console.<span class="code-fn">log</span>(fruit);
+});</pre></div>
+
+      <div class="options-row" id="arena-options">
+    <button class="opt-btn" data-testid="btn-option-map" onclick="selectOption('map')">map</button>
+  
+    <button class="opt-btn" data-testid="btn-option-forEach" onclick="selectOption('forEach')">forEach</button>
+  
+    <button class="opt-btn" data-testid="btn-option-reduce" onclick="selectOption('reduce')">reduce</button>
+  
+    <button class="opt-btn" data-testid="btn-option-filter" onclick="selectOption('filter')">filter</button>
+  </div>
+
+      <div class="arena-actions">
+        <div class="progress-dots" id="arena-dots"><div class="progress-dot current"></div><div class="progress-dot "></div><div class="progress-dot "></div></div>
+        <div style="display:flex;align-items:center;gap:14px">
+          <div class="feedback-msg hidden" id="arena-feedback"></div>
+          <button class="btn-primary" id="btn-verify" onclick="verifyCode()">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            Verificar Código
+          </button>
+          <button class="btn-success hidden" id="btn-next" onclick="nextChallenge()">
+            Próxima Missão
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </button>
+          <button class="btn-error hidden" id="btn-retry" onclick="retryChallengeBtn()">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 .49-3.93"></path></svg>
+            Tentar Novamente
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======== PAGE: PROFILE ======== -->
+  <div id="page-profile" class="page">
+    <div class="profile-grid">
+      <!-- Left column -->
+      <div style="display:flex;flex-direction:column;gap:22px">
+        <div class="card profile-card">
+          <div class="avatar-lg">
+            <img src="img/avatar.png" alt="Avatar" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+            <div class="lvl-badge">LVL 12</div>
+          </div>
+          <div class="profile-name">DanLima</div>
+          <div class="profile-handle">@dan_lima</div>
+          <div class="xp-bar-wrap" style="width:100%;margin-bottom:8px">
+            <div class="xp-label-row">
+              <span class="xp-label">Progresso para Lvl 13</span>
+              <span class="xp-value">750 / 1000 XP</span>
+            </div>
+            <div class="xp-track"><div class="xp-fill" style="width:75%"></div></div>
+          </div>
+        </div>
+
+        <div class="card" style="padding:22px">
+          <div style="font-size:16px;font-weight:700;margin-bottom:18px;display:flex;align-items:center;gap:8px">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#facc15" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-star"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"></path></svg>
+ Stats
+          </div>
+          <div class="stats-list">
+            <div class="stat-row"><span class="stat-label"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-code"><path d="m16 18 6-6-6-6"></path><path d="m8 6-6 6 6 6"></path></svg>
+ Missões Completas</span><span class="stat-val">42</span></div>
+            <div class="stat-row"><span class="stat-label"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-flame"><path d="M12 3q1 4 4 6.5t3 5.5a1 1 0 0 1-14 0 5 5 0 0 1 1-3 1 1 0 0 0 5 0c0-2-1.5-3-1.5-5q0-2 2.5-4"></path></svg> Streak Atual</span><span class="stat-val">7 Dias</span></div>
+            <div class="stat-row"><span class="stat-label"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-crown"><path d="M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.734H5.81a1 1 0 0 1-.957-.734L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z"></path><path d="M5 21h14"></path></svg>
+ Rank Global</span><span class="stat-val">#1337</span></div>
+            <div class="stat-row"><span class="stat-label"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-zap"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"></path></svg>
+ Total de XP</span><span class="stat-val">8.450</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right column -->
+      <div style="display:flex;flex-direction:column;gap:28px">
+        <section>
+          <h3 class="section-title" style="font-size:20px;margin-bottom:18px">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-primary"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6m12 5h1.5a2.5 2.5 0 0 0 0-5H18M4 22h16m-10-7.34V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22m7-7.34V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path><path d="M18 2H6v7a6 6 0 0 0 12 0z"></path></svg>
+
+ Conquistas
+          </h3>
+          <div class="achievements-grid">
+            <div class="ach-badge"><div class="ach-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-code"><path d="m16 18 6-6-6-6"></path><path d="m8 6-6 6 6 6"></path></svg></div><div class="ach-title">Primeira Missão</div></div>
+            <div class="ach-badge"><div class="ach-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-flame"><path d="M12 3q1 4 4 6.5t3 5.5a1 1 0 0 1-14 0 5 5 0 0 1 1-3 1 1 0 0 0 5 0c0-2-1.5-3-1.5-5q0-2 2.5-4"></path></svg></div><div class="ach-title">Streak de 7 Dias</div></div>
+            <div class="ach-badge"><div class="ach-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-terminal"><path d="M12 19h8"></path><path d="m4 17 6-6-6-6"></path></svg>
+</div><div class="ach-title">Bug Squasher</div></div>
+            <div class="ach-badge"><div class="ach-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-zap"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"></path></svg></div><div class="ach-title">Resolvedor Rápido</div></div>
+          </div>
+        </section>
+
+        <section>
+          <h3 style="font-size:18px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-history"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path><path d="M12 7v5l4 2"></path></svg> Atividade Recente
+          </h3>
+          <div class="card activity-list">
+            <div class="activity-item">
+              <div class="activity-dot mission"></div>
+              <div class="activity-info">
+                <div class="activity-title">Completou 'Recursive Depths'</div>
+                <div class="activity-time">2 horas atrás</div>
+              </div>
+              <div class="activity-xp">+150 XP</div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-dot badge"></div>
+              <div class="activity-info">
+                <div class="activity-title">Ganhou badge 'Bug Squasher'</div>
+                <div class="activity-time">1 dia atrás</div>
+              </div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-dot mission"></div>
+              <div class="activity-info">
+                <div class="activity-title">Completou 'Infinity Loops'</div>
+                <div class="activity-time">2 dias atrás</div>
+              </div>
+              <div class="activity-xp">+50 XP</div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======== PAGE: LEADERBOARD ======== -->
+  <div id="page-leaderboard" class="page">
+    <div class="lb-header">
+      <div class="lb-icon-wrap">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-crown"><path d="M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.734H5.81a1 1 0 0 1-.957-.734L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z"></path><path d="M5 21h14"></path></svg>
+      </div>
+      <div>
+        <div class="lb-title">Global Leaderboard</div>
+        <div class="lb-subtitle">Top hackers na arena CyberByte</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="lb-table-head">
+        <div style="text-align:center">Rank</div>
+        <div>Hacker</div>
+        <div style="text-align:center">Nível</div>
+        <div style="text-align:right">XP Total</div>
+        <div style="text-align:right">Streak</div>
+      </div>
+      <div id="lb-rows">
+    <div class="lb-row " style="animation-delay:0s">
+      <div><div class="rank-num rank-1">1</div></div>
+      <div class="lb-name ">
+        NullPointer 
+      </div>
+      <div class="lb-lvl">Lvl 42</div>
+      <div class="lb-xp">42.000</div>
+      <div class="lb-streak">
+        <span style="color:var(--orange);filter:drop-shadow(0 0 4px rgba(249,115,22,0.5))"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-flame"><path d="M12 3q1 4 4 6.5t3 5.5a1 1 0 0 1-14 0 5 5 0 0 1 1-3 1 1 0 0 0 5 0c0-2-1.5-3-1.5-5q0-2 2.5-4"></path></svg></span><span style="color:var(--orange)">30</span>
+      </div>
+    </div>
+  
+    <div class="lb-row " style="animation-delay:0.04s">
+      <div><div class="rank-num rank-2">2</div></div>
+      <div class="lb-name ">
+        ByteMaster 
+      </div>
+      <div class="lb-lvl">Lvl 38</div>
+      <div class="lb-xp">38.500</div>
+      <div class="lb-streak">
+        <span style="color:var(--orange);filter:drop-shadow(0 0 4px rgba(249,115,22,0.5))"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-flame"><path d="M12 3q1 4 4 6.5t3 5.5a1 1 0 0 1-14 0 5 5 0 0 1 1-3 1 1 0 0 0 5 0c0-2-1.5-3-1.5-5q0-2 2.5-4"></path></svg></span><span style="color:var(--orange)">12</span>
+      </div>
+    </div>
+  
+    <div class="lb-row " style="animation-delay:0.08s">
+      <div><div class="rank-num rank-3">3</div></div>
+      <div class="lb-name ">
+        SyntaxTerror 
+      </div>
+      <div class="lb-lvl">Lvl 35</div>
+      <div class="lb-xp">35.200</div>
+      <div class="lb-streak">
+        <span style="color:var(--orange);filter:drop-shadow(0 0 4px rgba(249,115,22,0.5))"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-flame"><path d="M12 3q1 4 4 6.5t3 5.5a1 1 0 0 1-14 0 5 5 0 0 1 1-3 1 1 0 0 0 5 0c0-2-1.5-3-1.5-5q0-2 2.5-4"></path></svg></span><span style="color:var(--orange)">5</span>
+      </div>
+    </div>
+  
+    <div class="lb-row " style="animation-delay:0.12s">
+      <div><div class="rank-num rank-n">4</div></div>
+      <div class="lb-name ">
+        CaffeineOverflow 
+      </div>
+      <div class="lb-lvl">Lvl 31</div>
+      <div class="lb-xp">31.000</div>
+      <div class="lb-streak">
+        <span style="color:var(--orange);filter:drop-shadow(0 0 4px rgba(249,115,22,0.5))"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-flame"><path d="M12 3q1 4 4 6.5t3 5.5a1 1 0 0 1-14 0 5 5 0 0 1 1-3 1 1 0 0 0 5 0c0-2-1.5-3-1.5-5q0-2 2.5-4"></path></svg></span><span style="color:var(--orange)">8</span>
+      </div>
+    </div>
+  
+    <div class="lb-row " style="animation-delay:0.16s">
+      <div><div class="rank-num rank-n">5</div></div>
+      <div class="lb-name ">
+        VoidRunner 
+      </div>
+      <div class="lb-lvl">Lvl 29</div>
+      <div class="lb-xp">29.400</div>
+      <div class="lb-streak">
+        <span style="color:var(--orange);filter:drop-shadow(0 0 4px rgba(249,115,22,0.5))"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-flame"><path d="M12 3q1 4 4 6.5t3 5.5a1 1 0 0 1-14 0 5 5 0 0 1 1-3 1 1 0 0 0 5 0c0-2-1.5-3-1.5-5q0-2 2.5-4"></path></svg></span><span style="color:var(--orange)">21</span>
+      </div>
+    </div>
+  
+    <div class="lb-row " style="animation-delay:0.2s">
+      <div><div class="rank-num rank-n">6</div></div>
+      <div class="lb-name ">
+        StackSmasher 
+      </div>
+      <div class="lb-lvl">Lvl 25</div>
+      <div class="lb-xp">25.100</div>
+      <div class="lb-streak">
+        <span style="color:var(--orange);filter:drop-shadow(0 0 4px rgba(249,115,22,0.5))"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-flame"><path d="M12 3q1 4 4 6.5t3 5.5a1 1 0 0 1-14 0 5 5 0 0 1 1-3 1 1 0 0 0 5 0c0-2-1.5-3-1.5-5q0-2 2.5-4"></path></svg></span><span style="color:var(--orange)">3</span>
+      </div>
+    </div>
+  
+    <div class="lb-row me" style="animation-delay:0.24s">
+      <div><div class="rank-num rank-n">7</div></div>
+      <div class="lb-name me-name">
+        DanLima <span class="me-tag">Você</span>
+      </div>
+      <div class="lb-lvl">Lvl 12</div>
+      <div class="lb-xp">12.750</div>
+      <div class="lb-streak">
+        <span style="color:var(--orange);filter:drop-shadow(0 0 4px rgba(249,115,22,0.5))"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-flame"><path d="M12 3q1 4 4 6.5t3 5.5a1 1 0 0 1-14 0 5 5 0 0 1 1-3 1 1 0 0 0 5 0c0-2-1.5-3-1.5-5q0-2 2.5-4"></path></svg></span><span style="color:var(--orange)">7</span>
+      </div>
+    </div>
+  
+    <div class="lb-row " style="animation-delay:0.28s">
+      <div><div class="rank-num rank-n">8</div></div>
+      <div class="lb-name ">
+        GhostInTheShell 
+      </div>
+      <div class="lb-lvl">Lvl 11</div>
+      <div class="lb-xp">11.000</div>
+      <div class="lb-streak">
+        <span style="color:var(--orange);filter:drop-shadow(0 0 4px rgba(249,115,22,0.5))"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-flame"><path d="M12 3q1 4 4 6.5t3 5.5a1 1 0 0 1-14 0 5 5 0 0 1 1-3 1 1 0 0 0 5 0c0-2-1.5-3-1.5-5q0-2 2.5-4"></path></svg></span><span style="color:var(--orange)">2</span>
+      </div>
+    </div>
+  
+    <div class="lb-row " style="animation-delay:0.32s">
+      <div><div class="rank-num rank-n">9</div></div>
+      <div class="lb-name ">
+        ArrayOfSunshine 
+      </div>
+      <div class="lb-lvl">Lvl 9</div>
+      <div class="lb-xp">9.500</div>
+      <div class="lb-streak">
+        <span style="color:var(--orange);filter:drop-shadow(0 0 4px rgba(249,115,22,0.5))"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-flame"><path d="M12 3q1 4 4 6.5t3 5.5a1 1 0 0 1-14 0 5 5 0 0 1 1-3 1 1 0 0 0 5 0c0-2-1.5-3-1.5-5q0-2 2.5-4"></path></svg></span><span style="color:var(--orange)">1</span>
+      </div>
+    </div>
+  
+    <div class="lb-row " style="animation-delay:0.36s">
+      <div><div class="rank-num rank-n">10</div></div>
+      <div class="lb-name ">
+        GitGud 
+      </div>
+      <div class="lb-lvl">Lvl 5</div>
+      <div class="lb-xp">5.200</div>
+      <div class="lb-streak">
+        <span style="color:var(--muted)">—</span>
+      </div>
+    </div>
+  </div>
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<!-- ======================== TOAST ======================== -->
+<div id="toast"></div>
+
+<script>
+/* ============================================================
+   ROUTER
+   ============================================================ */
+function navigate(page, linkEl) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  if (linkEl) linkEl.classList.add('active');
+  if (page === 'arena') initArena();
+  window.scrollTo(0,0);
+}
+
+/* ============================================================
+   QUEST DATA
+   ============================================================ */
+const quests = [
+  { id:'py-vars',  title:'Python: Data & Variáveis', lang:'Python', diff:'Beginner', img:'python-quest.png', color:'#1a2e1a', glow:'#10B981' },
+  { id:'js-loops', title:'JavaScript: Infinity Loops', lang:'JavaScript', diff:'Beginner', img:'js-quest.png', color:'#2a2800', glow:'#facc15' },
+  { id:'react-st', title:'React: O Poder do State', lang:'React', diff:'Intermediate', img:'react-quest.png', color:'#001e2e', glow:'#00F5FF' },
+  { id:'ts-async', title:'TypeScript: Async Await', lang:'TypeScript', diff:'Intermediate', img:'ts-quest.png', color:'#001a2e', glow:'#3b82f6' },
+  { id:'cpp-rec',  title:'C++: Profundezas Recursivas', lang:'C++', diff:'Advanced', img:'cpp-quest.png', color:'#2a1500', glow:'#f97316' },
+  { id:'rust-mem', title:'Rust: Memória Segura', lang:'Rust', diff:'Advanced', img:'rust-quest.png', color:'#2a0a00', glow:'#ef4444' },
+];
+
+function renderQuests() {
+  const grid = document.getElementById('quest-grid');
+  grid.innerHTML = quests.map((q, i) => `
+    <div class="quest-card" style="animation-delay:${i*0.08}s" onclick="navigate('arena',document.querySelector('[data-page=arena]'))">
+      <div class="quest-img">
+        <div class="quest-img-bg">
+          <img src="img/${q.img}" alt="${q.title}" style="width:100%; height:100%; object-fit: cover;">
+        </div>
+        <div class="quest-img-gradient"></div>
+        <div class="quest-badge-pos"><span class="badge badge-${q.diff.toLowerCase()}">${q.diff}</span></div>
+      </div>
+      <div class="quest-body">
+        <span class="tag-lang">${q.lang}</span>
+        <h3>${q.title}</h3>
+        <a class="quest-start" href="#" onclick="event.preventDefault();navigate('arena',document.querySelector('[data-page=arena]'))">
+          Iniciar Missão
+        </a>
+      </div>
+    </div>
+  `).join('');
+}
+
+/* ============================================================
+   ARENA / CHALLENGE ENGINE
+   ============================================================ */
+const challenges = [
+  {
+    id:'js-1', title:'Array Iteration', lang:'JavaScript',
+    html: `<span class="code-kw">const</span> fruits = [<span class="code-str">'apple'</span>, <span class="code-str">'banana'</span>, <span class="code-str">'cherry'</span>];\n\nfruits.<input id="code-gap" class="code-input" data-expected="forEach" style="width:8ch" placeholder="____" data-testid="input-code-gap" autocomplete="off" />(fruit <span class="code-fn">=&gt;</span> {\n  console.<span class="code-fn">log</span>(fruit);\n});`,
+    options: ['map','forEach','reduce','filter'],
+    xp: 50
+  },
+  {
+    id:'py-1', title:'Python Def', lang:'Python',
+    html: `<input id="code-gap" class="code-input" data-expected="def" style="width:5ch" placeholder="___" data-testid="input-code-gap" autocomplete="off" /> <span class="code-fn">greet</span>(name):\n    <span class="code-kw">return</span> <span class="code-str">f'Hello {'{'}name{'}'}'</span>\n\n<span class="code-fn">print</span>(<span class="code-fn">greet</span>(<span class="code-str">'Cyber'</span>))`,
+    options: ['function','def','func','define'],
+    xp: 100
+  },
+  {
+    id:'ts-1', title:'TypeScript Interfaces', lang:'TypeScript',
+    html: `<span class="code-kw">interface</span> User {\n  id: <span class="code-kw">number</span>;\n  name: <span class="code-kw">string</span>;\n  isActive: <input id="code-gap" class="code-input" data-expected="boolean" style="width:9ch" placeholder="_______" data-testid="input-code-gap" autocomplete="off" />;\n}`,
+    options: ['bool','Boolean','boolean','true/false'],
+    xp: 150
+  }
+];
+
+let currentChallenge = 0;
+let currentXP = 750;
+let arenaState = 'idle'; // idle | success | error
+
+function initArena() {
+  currentChallenge = 0;
+  arenaState = 'idle';
+  renderChallenge();
+}
+
+function renderChallenge() {
+  const ch = challenges[currentChallenge];
+  arenaState = 'idle';
+
+  document.getElementById('arena-lang').textContent = ch.lang;
+  document.getElementById('arena-progress').textContent = `Missão ${currentChallenge+1}/${challenges.length}`;
+  document.getElementById('arena-title').textContent = ch.title;
+
+  updateXPDisplay();
+
+  // Code block
+  document.getElementById('arena-code').innerHTML = `<pre style="white-space:pre-wrap;line-height:1.8">${ch.html}</pre>`;
+
+  // Re-bind input Enter key
+  const inp = document.getElementById('code-gap');
+  if (inp) {
+    inp.addEventListener('keydown', e => { if (e.key === 'Enter') verifyCode(); });
+  }
+
+  // Options
+  document.getElementById('arena-options').innerHTML = ch.options.map(o => `
+    <button class="opt-btn" data-testid="btn-option-${o}" onclick="selectOption('${o}')">${o}</button>
+  `).join('');
+
+  // Progress dots
+  document.getElementById('arena-dots').innerHTML = challenges.map((_,i) =>
+    `<div class="progress-dot ${i < currentChallenge ? 'done' : i === currentChallenge ? 'current' : ''}"></div>`
+  ).join('');
+
+  // Button states
+  showBtn('verify'); hideFeedback();
+}
+
+function selectOption(val) {
+  if (arenaState !== 'idle') return;
+  const inp = document.getElementById('code-gap');
+  if (inp) { inp.value = val; inp.focus(); }
+}
+
+function verifyCode() {
+  if (arenaState !== 'idle') return;
+  const inp = document.getElementById('code-gap');
+  if (!inp || !inp.value.trim()) { showToast('Preencha o campo antes de verificar!', 'error'); return; }
+
+  const expected = inp.dataset.expected;
+  if (inp.value.trim() === expected) {
+    arenaState = 'success';
+    inp.classList.add('correct');
+    inp.disabled = true;
+    currentXP = Math.min(1000, currentXP + challenges[currentChallenge].xp);
+    updateXPDisplay();
+    showFeedback('success', `+${challenges[currentChallenge].xp} XP — Correto!`);
+    showBtn('next');
+    showToast(`Correto! +${challenges[currentChallenge].xp} XP ganho`, 'success');
+  } else {
+    arenaState = 'error';
+    inp.classList.add('wrong');
+    showFeedback('error', 'Erro de Sintaxe!');
+    showBtn('retry');
+    showToast(`Resposta incorreta. Tente novamente!`, 'error');
+  }
+}
+
+function nextChallenge() {
+  if (currentChallenge < challenges.length - 1) {
+    currentChallenge++;
+    renderChallenge();
+  } else {
+    showToast('Parabéns! Todas as missões completas!', 'success');
+    setTimeout(() => navigate('leaderboard', document.querySelector('[data-page=leaderboard]')), 1200);
+  }
+}
+
+function retryChallengeBtn() {
+  const inp = document.getElementById('code-gap');
+  if (inp) { inp.value = ''; inp.classList.remove('wrong','correct'); inp.disabled = false; inp.focus(); }
+  arenaState = 'idle';
+  showBtn('verify');
+  hideFeedback();
+}
+
+function updateXPDisplay() {
+  document.getElementById('arena-xp-label').textContent = `${currentXP} / 1000 XP`;
+  document.getElementById('arena-xp-bar').style.width = (currentXP / 1000 * 100) + '%';
+}
+
+function showBtn(which) {
+  document.getElementById('btn-verify').classList.toggle('hidden', which !== 'verify');
+  document.getElementById('btn-next').classList.toggle('hidden', which !== 'next');
+  document.getElementById('btn-retry').classList.toggle('hidden', which !== 'retry');
+}
+
+function showFeedback(type, msg) {
+  const el = document.getElementById('arena-feedback');
+  el.className = `feedback-msg feedback-${type}`;
+  el.textContent = msg;
+  el.classList.remove('hidden');
+}
+function hideFeedback() { document.getElementById('arena-feedback').classList.add('hidden'); }
+
+/* ============================================================
+   LEADERBOARD DATA
+   ============================================================ */
+const players = [
+  { rank:1,  name:'NullPointer',       lvl:42, xp:42000, streak:30, me:false },
+  { rank:2,  name:'ByteMaster',        lvl:38, xp:38500, streak:12, me:false },
+  { rank:3,  name:'SyntaxTerror',      lvl:35, xp:35200, streak:5,  me:false },
+  { rank:4,  name:'CaffeineOverflow',  lvl:31, xp:31000, streak:8,  me:false },
+  { rank:5,  name:'VoidRunner',        lvl:29, xp:29400, streak:21, me:false },
+  { rank:6,  name:'StackSmasher',      lvl:25, xp:25100, streak:3,  me:false },
+  { rank:7,  name:'DanLima',         lvl:12, xp:12750, streak:7,  me:true  },
+  { rank:8,  name:'GhostInTheShell',   lvl:11, xp:11000, streak:2,  me:false },
+  { rank:9,  name:'ArrayOfSunshine',   lvl:9,  xp:9500,  streak:1,  me:false },
+  { rank:10, name:'GitGud',            lvl:5,  xp:5200,  streak:0,  me:false },
+];
+
+function renderLeaderboard() {
+  const rankClass = r => r === 1 ? 'rank-1' : r === 2 ? 'rank-2' : r === 3 ? 'rank-3' : 'rank-n';
+  document.getElementById('lb-rows').innerHTML = players.map((p,i) => `
+    <div class="lb-row ${p.me ? 'me' : ''}" style="animation-delay:${i*0.04}s">
+      <div><div class="rank-num ${rankClass(p.rank)}">${p.rank}</div></div>
+      <div class="lb-name ${p.me ? 'me-name' : ''}">
+        ${p.name} ${p.me ? '<span class="me-tag">Você</span>' : ''}
+      </div>
+      <div class="lb-lvl">Lvl ${p.lvl}</div>
+      <div class="lb-xp">${p.xp.toLocaleString('pt-BR')}</div>
+      <div class="lb-streak">
+        ${p.streak > 0 ? `<span style="color:var(--orange);filter:drop-shadow(0 0 4px rgba(249,115,22,0.5))"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-flame"><path d="M12 3q1 4 4 6.5t3 5.5a1 1 0 0 1-14 0 5 5 0 0 1 1-3 1 1 0 0 0 5 0c0-2-1.5-3-1.5-5q0-2 2.5-4"></path></svg></span><span style="color:var(--orange)">${p.streak}</span>` : '<span style="color:var(--muted)">—</span>'}
+      </div>
+    </div>
+  `).join('');
+}
+
+/* ============================================================
+   TOAST
+   ============================================================ */
+let toastTimer;
+function showToast(msg, type = 'success') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = `${type} show`;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { t.classList.remove('show'); }, 3000);
+}
+
+/* ============================================================
+   INIT
+   ============================================================ */
+renderQuests();
+renderLeaderboard();
+</script>
+
+
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+</body></html>
