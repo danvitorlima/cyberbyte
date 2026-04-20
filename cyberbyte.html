@@ -1,13 +1,13 @@
 <html lang="pt-BR" class="dark"><head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CyberByte: Code &amp; Conquer</title>
+  <title>CyberByte: Código &amp; Conquistar</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&amp;family=JetBrains+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet">
   <style>
-    /* ===== RESET & BASE ===== */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    /* ===== REINICIAR E BASE ===== */
+    *, *::before, *::after {box-sizing: border-box;margin: 0px;padding: 0;}
 
     :root {
       --bg:        #0F172A;
@@ -47,12 +47,12 @@
     button { cursor: pointer; font-family: var(--font); border: none; }
     input { font-family: var(--mono); }
 
-    /* ===== SCROLLBAR ===== */
+    /* ===== BARRA DE ROLAGEM ===== */
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: var(--bg); }
     ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 
-    /* ===== SIDEBAR ===== */
+    /* ===== BARRA LATERAL ===== */
     #sidebar {
       width: 240px;
       min-width: 240px;
@@ -70,8 +70,11 @@
       padding: 24px;
       font-size: 22px;
       font-weight: 700;
-      color: var(--primary);
       letter-spacing: -0.5px;
+      background: linear-gradient(to right, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
       text-shadow: 0 0 20px var(--primary30);
     }
 
@@ -119,12 +122,12 @@
     .sidebar-user .user-info .lvl { font-size: 13px; font-weight: 600; }
     .sidebar-user .user-info .role { font-size: 11px; color: var(--muted); }
 
-    /* ===== MAIN CONTENT ===== */
+    /* ===== CONTEÚDO PRINCIPAL ===== */
     #main { flex: 1; overflow-y: auto; }
     .page { display: none; padding: 32px; max-width: 1100px; margin: 0 auto; }
     .page.active { display: block; }
 
-    /* ===== XP BAR ===== */
+    /* ===== BARRA DE XP ===== */
     .xp-bar-wrap { width: 100%; }
     .xp-label-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
     .xp-label { font-size: 13px; color: var(--muted); }
@@ -151,7 +154,7 @@
       background: linear-gradient(to right, transparent, rgba(255,255,255,0.3));
     }
 
-    /* ===== BO ===== */
+    /* ===== BOTÕES ===== */
     .btn-primary {
       background: var(--primary);
       color: #fff;
@@ -234,7 +237,7 @@
       border: 1px solid rgba(0,245,255,0.2);
     }
 
-    /* ========== PAGE: HOME ========== */
+    /* ========== PÁGINA: INÍCIO ========== */
     .hero {
       position: relative;
       overflow: hidden;
@@ -339,7 +342,7 @@
     }
     .quest-start:hover { box-shadow: 0 0 18px var(--primary30); }
 
-    /* ========== PAGE: ARENA ========== */
+    /* ========== PÁGINA: ARENA ========== */
     .arena-wrap { max-width: 860px; margin: 0 auto; }
 
     .arena-header {
@@ -382,8 +385,8 @@
       color: var(--accent);
       font-family: var(--mono);
       font-size: 14px;
-      padding: 1px 6px;
-      margin: 0 2px;
+      padding: 0px 0px;
+      margin: 0px 0px;
       text-align: center;
       transition: all 0.2s;
       outline: none;
@@ -425,7 +428,7 @@
     .progress-dot.done { background: var(--success); box-shadow: 0 0 6px rgba(16,185,129,0.6); }
     .progress-dot.current { background: var(--accent); box-shadow: 0 0 6px rgba(0,245,255,0.6); }
 
-    /* ========== PAGE: PROFILE ========== */
+    /* ========== PÁGINA: PERFIL ========== */
     .profile-grid { display: grid; grid-template-columns: 280px 1fr; gap: 28px; }
     @media (max-width: 768px) { .profile-grid { grid-template-columns: 1fr; } }
 
@@ -434,25 +437,33 @@
       display: flex; flex-direction: column; align-items: center; text-align: center;
     }
     .avatar-lg {
-      width: 110px; height: 110px; border-radius: 50%;
-      border: 3px solid rgba(139,92,246,0.5);
-      box-shadow: 0 0 25px var(--primary30);
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      border: 3px solid rgba(139, 92, 246, 0.5);
+      box-shadow: 0 0 50px var(--primary30);
       background: var(--border);
-      display: flex; align-items: center; justify-content: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       font-size: 50px;
       margin-bottom: 20px;
       position: relative;
     }
     .lvl-badge {
-      position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%);
+      position: absolute;
+      bottom: -8px;
+      left: 50%;
+      transform: translateX(-50%);
       background: var(--accent);
       color: #0F172A;
       font-family: var(--mono);
-      font-size: 11px; font-weight: 700;
+      font-size: 11px;
+      font-weight: 700;
       padding: 2px 10px;
       border-radius: 999px;
       border: 1px solid var(--border);
-      box-shadow: 0 0 10px rgba(0,245,255,0.5);
+      box-shadow: 0 0 30px rgba(0,245,255,0.5);
       white-space: nowrap;
     }
     .profile-name { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
@@ -511,7 +522,7 @@
     .activity-time  { font-size: 12px; color: var(--muted); margin-top: 2px; }
     .activity-xp { font-family: var(--mono); font-size: 13px; font-weight: 700; color: var(--success); }
 
-    /* ========== PAGE: LEADERBOARD ========== */
+    /* ========== PÁGINA: CLASSIFICACAO ========== */
     .lb-header { display: flex; align-items: center; gap: 16px; margin-bottom: 32px; }
     .lb-icon-wrap {
       width: 52px; height: 52px;
@@ -569,7 +580,7 @@
     .lb-xp  { font-family: var(--mono); font-size: 13px; text-align: right; }
     .lb-streak { display: flex; justify-content: flex-end; align-items: center; gap: 5px; font-family: var(--mono); font-size: 13px; color: var(--orange); }
 
-    /* ===== NOTIFICATION TOAST ===== */
+    /* ===== NOTIFICAÇÃO TOAST ===== */
     #toast {
       position: fixed; bottom: 28px; right: 28px;
       padding: 14px 22px;
@@ -584,7 +595,7 @@
     #toast.success { background: rgba(16,185,129,0.15); border: 1px solid rgba(16,185,129,0.4); color: var(--success); box-shadow: 0 0 20px rgba(16,185,129,0.2); }
     #toast.error   { background: rgba(239,68,68,0.15);  border: 1px solid rgba(239,68,68,0.4);  color: var(--error);   box-shadow: 0 0 20px rgba(239,68,68,0.2); }
 
-    /* ===== RESPONSIVE ===== */
+    /* ===== RESPONSIVO ===== */
     @media (max-width: 640px) {
       #sidebar { display: none; }
       .page { padding: 20px 16px; }
@@ -597,7 +608,7 @@
       .lb-row > *:nth-child(5) { display: none; }
     }
 
-    /* ===== UTIL ===== */
+    /* ===== UTILIDADE ===== */
     .hidden { display: none !important; }
     .mb-4 { margin-bottom: 16px; }
     .mb-8 { margin-bottom: 32px; }
@@ -609,10 +620,10 @@
   video {
     filter: -opera-shader(url(data:text/plain;base64,Ly8gaHR0cHM6Ly9naXRodWIuY29tL0dQVU9wZW4tRWZmZWN0cy9GaWRlbGl0eUZYLUNBUwovLyB2MwoKdW5pZm9ybSBzaGFkZXIgaUNodW5rOwp1bmlmb3JtIGZsb2F0MiBpTW91c2U7CnVuaWZvcm0gZmxvYXQ0IGlWaXNpYmxlUmVjdDsKdW5pZm9ybSBmbG9hdCBpQXJnc1sxXTsKCmNvbnN0IGZsb2F0IEVQU0lPTiA9IDAuMTsKY29uc3QgZmxvYXQgVl9NSU4gPSAwOwpjb25zdCBmbG9hdCBWX0xPVyA9IDAuMjU7CmNvbnN0IGZsb2F0IFZfTUVEID0gMC41Owpjb25zdCBmbG9hdCBWX0hJR0ggPSAwLjc1Owpjb25zdCBmbG9hdCBWX01BWCA9IDE7Cgpjb25zdCBmbG9hdCBUSFJFU0hPTERfQVJFQSA9IDgwMCAqIDYwMDsKY29uc3QgZmxvYXQgTUlOX0FSRUEgPSA0MDAgKiAxMDA7CmNvbnN0IGZsb2F0IE1JTl9TVFJJUCA9IDIwOwpjb25zdCBmbG9hdCBNQVJHSU4gPSAxOwoKaW5saW5lIGZsb2F0MyBwaXhlbChmbG9hdDIgeHksIGZsb2F0MiBvZmZzZXQpIHsKICAgIHJldHVybiBpQ2h1bmsuZXZhbCh4eSArIG9mZnNldCkucmdiOwp9CgppbmxpbmUgZmxvYXQzIHNoYXJwZW4oZmxvYXQyIHh5KSB7CiAgICBmbG9hdDMgZiA9CiAgICAgICAgcGl4ZWwoeHksIGZsb2F0MigtMSwgLTEpKSAqICAxICsKICAgICAgICBwaXhlbCh4eSwgZmxvYXQyKCAwLCAtMSkpICogLTEgKwogICAgICAgIHBpeGVsKHh5LCBmbG9hdDIoIDEsIC0xKSkgKiAgMSArCgogICAgICAgIHBpeGVsKHh5LCBmbG9hdDIoLTEsIDApKSAqIC0xICArCiAgICAgICAgcGl4ZWwoeHksIGZsb2F0MiggMCwgMCkpICogLTEgICsKICAgICAgICBwaXhlbCh4eSwgZmxvYXQyKCAxLCAwKSkgKiAtMSAgKwoKICAgICAgICBwaXhlbCh4eSwgZmxvYXQyKC0xLCAxKSkgKiAxICAgKwogICAgICAgIHBpeGVsKHh5LCBmbG9hdDIoIDAsIDEpKSAqIC0xICArCiAgICAgICAgcGl4ZWwoeHksIGZsb2F0MiggMSwgMSkpICogMTsKICAgIHJldHVybiBmIC8gLTE7Cn0KCmZsb2F0NCBSR1gyKGZsb2F0MiB4eSkgewogICAgZmxvYXQyIGNodW5rX3NpemUgPSBpVmlzaWJsZVJlY3Quenc7CiAgICBmbG9hdDQgY29sb3IgPSBpQ2h1bmsuZXZhbCh4eSk7CgogICAgaWYgKGNodW5rX3NpemUueCAqIGNodW5rX3NpemUueSA8IE1JTl9BUkVBKSB7CiAgICAgICAgcmV0dXJuIGNvbG9yOwogICAgfQoKICAgIGlmIChjaHVua19zaXplLnkgPCBNSU5fU1RSSVAgfHwgY2h1bmtfc2l6ZS54IDwgTUlOX1NUUklQKSB7CiAgICAgICAgcmV0dXJuIGNvbG9yOwogICAgfQoKICAgIGlmICh4eS54IDwgTUFSR0lOIHx8IHh5LnggPiAoY2h1bmtfc2l6ZS54IC0gTUFSR0lOKSB8fAogICAgICAgIHh5LnkgPCBNQVJHSU4gfHwgeHkueSA+IChjaHVua19zaXplLnkgLSBNQVJHSU4pKSB7CiAgICAgICAgcmV0dXJuIGNvbG9yOwogICAgfQoKICAgIHJldHVybiBmbG9hdDQoc2hhcnBlbih4eSksIDEpOwp9CgppbmxpbmUgZmxvYXQzIG1pbjN2KGZsb2F0MyB4LCBmbG9hdDMgeSwgZmxvYXQzIHopIHsKCXJldHVybiBtaW4oeCwgbWluKHksIHopKTsKfQoKaW5saW5lIGZsb2F0MyBtYXgzdihmbG9hdDMgeCwgZmxvYXQzIHksIGZsb2F0MyB6KSB7CglyZXR1cm4gbWF4KHgsIG1heCh5LCB6KSk7Cn0KCmZsb2F0MyBSR1gzKGZsb2F0MiB4eSwgZmxvYXQgc3RyZW5ndGgpIHsKICAgIGZsb2F0MyBhID0gcGl4ZWwoeHksIGZsb2F0MigtMSwgLTEpKTsKICAgIGZsb2F0MyBiID0gcGl4ZWwoeHksIGZsb2F0MiggMCwgLTEpKTsKICAgIGZsb2F0MyBjID0gcGl4ZWwoeHksIGZsb2F0MiggMSwgLTEpKTsKCiAgICBmbG9hdDMgZCA9IHBpeGVsKHh5LCBmbG9hdDIoLTEsIDApKTsKICAgIGZsb2F0MyBlID0gcGl4ZWwoeHksIGZsb2F0MiggMCwgMCkpOwogICAgZmxvYXQzIGYgPSBwaXhlbCh4eSwgZmxvYXQyKCAxLCAwKSk7CgogICAgZmxvYXQzIGcgPSBwaXhlbCh4eSwgZmxvYXQyKC0xLCAxKSk7CiAgICBmbG9hdDMgaCA9IHBpeGVsKHh5LCBmbG9hdDIoIDAsIDEpKTsKICAgIGZsb2F0MyBpID0gcGl4ZWwoeHksIGZsb2F0MiggMSwgMSkpOwoKICAgIGZsb2F0MyBtaW5fZGVmID0gbWluM3YoZCwgZSwgZik7CiAgICBmbG9hdDMgbWluX2JkZWZoID0gbWluM3YoYiwgbWluX2RlZiwgaCk7CiAgICBmbG9hdDMgbWluX2FiY2RmZ2hpID0gbWluM3YobWluM3YoYSwgbWluX2JkZWZoLCBjKSwgZywgaSk7CiAgICBmbG9hdDMgbWluM19mYWN0b3IgPSBtaW5fYmRlZmggKyBtaW5fYWJjZGZnaGk7CgogICAgZmxvYXQzIG1heF9kZWYgPSBtYXgzdihkLCBlLCBmKTsKICAgIGZsb2F0MyBtYXhfYmRlZmggPSBtYXgzdihiLCBtYXhfZGVmLCBoKTsKICAgIGZsb2F0MyBtYXhfYWJjZGZnaGkgPSBtYXgzdihtYXgzdihhLCBtaW5fYmRlZmgsIGMpLCBnLCBpKTsKICAgIGZsb2F0MyBtYXgzX2ZhY3RvciA9IG1heF9iZGVmaCArIG1heF9hYmNkZmdoaTsKCiAgICBmbG9hdDMgZmFjdG9yID0gMS4wIC8gbWF4M19mYWN0b3I7CgogICAgZmxvYXQzIGFtcCA9IHNhdHVyYXRlKG1pbihtaW4zX2ZhY3RvciwgMiAtIG1heDNfZmFjdG9yKSAqIGZhY3Rvcik7CiAgICBmbG9hdDMgYW1wX3NxcnQgPSBzcXJ0KGFtcCk7CgogICAgZmxvYXQgcGVhayA9IC0xLjAgLyAobWl4KDgsIDUsIHN0cmVuZ3RoKSk7CgogICAgZmxvYXQzIGNyb3NzX3dlaWdodHMgPSBhbXBfc3FydCAqIHBlYWs7CiAgICBmbG9hdDMgd2VpZ2h0cyA9IDEgLyAoMSArIDQgKiBjcm9zc193ZWlnaHRzKTsKCiAgICBmbG9hdDMgcmVzdWx0ID0gKChiICsgZCArIGYgKyBoKSAqIGNyb3NzX3dlaWdodHMgKyBlKSAqIHdlaWdodHM7CgogICAgcmV0dXJuIHNhdHVyYXRlKHJlc3VsdCk7Cn0KCmZsb2F0NCBtYWluKGZsb2F0MiB4eSkgewoKICAgIGZsb2F0NCBvcmlnaW5hbENvbG9yID0gaUNodW5rLmV2YWwoeHkpOwogICAgaWYgKG9yaWdpbmFsQ29sb3IuYSA8IDEpIHsKICAgICAgICByZXR1cm4gaUNodW5rLmV2YWwoeHkpOwogICAgfQoKICAgIGZsb2F0IGludGVuc2l0eSA9IGlBcmdzWzBdOwogICAgZmxvYXQgc3RyZW5ndGggPSAwOwogICAgZmxvYXQzIGNvbG9yOwoKICAgIGlmIChpbnRlbnNpdHkgPCBWX01JTiArIEVQU0lPTikgewogICAgICAgIHN0cmVuZ3RoID0gMC4xMDsKICAgICAgICBjb2xvciA9IFJHWDMoeHksIHN0cmVuZ3RoKTsKCiAgICB9IGVsc2UgaWYgKGludGVuc2l0eSA+IFZfTE9XIC0gRVBTSU9OICYmIGludGVuc2l0eSA8IFZfTE9XICsgRVBTSU9OKSB7CiAgICAgICAgc3RyZW5ndGggPSAwLjMzOwogICAgICAgIGNvbG9yID0gUkdYMyh4eSwgc3RyZW5ndGgpOwoKICAgIH0gZWxzZSBpZiAoaW50ZW5zaXR5ID4gVl9NRUQgLSBFUFNJT04gJiYgaW50ZW5zaXR5IDwgVl9NRUQgKyBFUFNJT04pIHsKICAgICAgICBzdHJlbmd0aCA9IDAuNTsKICAgICAgICBjb2xvciA9IFJHWDMoeHksIHN0cmVuZ3RoKTsKCiAgICB9IGVsc2UgaWYgKGludGVuc2l0eSA+IFZfSElHSCAtIEVQU0lPTiAmJiBpbnRlbnNpdHkgPCBWX0hJR0ggKyBFUFNJT04pIHsKICAgICAgICBzdHJlbmd0aCA9IDAuOTk7CiAgICAgICAgY29sb3IgPSBSR1gzKHh5LCBzdHJlbmd0aCk7CgogICAgfSBlbHNlIGlmIChpbnRlbnNpdHkgPiBWX01BWCAtIEVQU0lPTikgewogICAgICAgIHN0cmVuZ3RoID0gMTsKICAgICAgICBjb2xvciA9IFJHWDIoeHkpLnJnYjsKICAgIH0KCiAgICByZXR1cm4gZmxvYXQ0KGNvbG9yLCBvcmlnaW5hbENvbG9yLmEpOwp9) -opera-args(0.50 calc(env(-opera-accent-color-r, 255)/255) calc(env(-opera-accent-color-g, 255)/255) calc(env(-opera-accent-color-b, 255)/255)));
   }
-</style><style type="text/css"></style><style type="text/css"></style><style type="text/css"></style></head>
+</style><style type="text/css"></style><style type="text/css"></style><style type="text/css"></style><style type="text/css"></style><style type="text/css"></style><style type="text/css"></style></head>
 <body>
 
-<!-- ======================== SIDEBAR ======================== -->
+<!-- ======================== BARRA LATERAL ======================== -->
 <aside id="sidebar">
   <div class="sidebar-logo">CyberByte</div>
   <nav class="sidebar-nav">
@@ -621,7 +632,7 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
       Hub
     </a>
-    <a class="nav-link active" data-page="arena" onclick="navigate('arena',this)">
+    <a class="nav-link" data-page="arena" onclick="navigate('arena',this)">
       <!-- Code icon -->
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
       Arena
@@ -631,7 +642,7 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path></svg>
       Leaderboard
     </a>
-    <a class="nav-link" data-page="profile" onclick="navigate('profile',this)">
+    <a class="nav-link active" data-page="profile" onclick="navigate('profile',this)">
       <!-- User icon -->
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
       Profile
@@ -648,19 +659,19 @@
   </div>
 </aside>
 
-<!-- ======================== MAIN ======================== -->
+<!-- ======================== MENU ======================== -->
 <div id="main">
 
   <!-- ======== PAGE: HOME ======== -->
   <div id="page-home" class="page">
     <section class="hero">
       <div class="hero-content">
-        <h1>Welcome to <span class="gradient">CyberByte</span></h1>
-        <p>Jack in e suba de nível com suas habilidades de código. Complete missões, ganhe XP e conquiste o leaderboard no arcade definitivo dos desenvolvedores.</p>
+        <h1>Bem-vindo(a) ao <span class="gradient">CyberByte</span></h1>
+        <p>Conecte-se e aprimore suas habilidades de programação. Complete missões, ganhe XP e conquiste o topo do ranking no melhor jogo de arcade dos desenvolvedores.</p>
         <div class="hero-btns">
           <button class="btn-primary" onclick="navigate('arena',document.querySelector('[data-page=arena]'))">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-            Quick Start
+            Início rápido
           </button>
           <button class="btn-outline" onclick="navigate('leaderboard',document.querySelector('[data-page=leaderboard]'))">Ver Ranking</button>
         </div>
@@ -777,8 +788,8 @@
   </div>
   </div>
 
-  <!-- ======== PAGE: ARENA ======== -->
-  <div id="page-arena" class="page active">
+  <!-- ======== PÁGINA: ARENA ======== -->
+  <div id="page-arena" class="page">
     <div class="arena-wrap">
       <div class="arena-header">
         <div>
@@ -794,31 +805,31 @@
               <span class="xp-label">XP Atual</span>
               <span class="xp-value" id="arena-xp-label">750 / 1000 XP</span>
             </div>
-            <div class="xp-track"><div class="xp-fill" id="arena-xp-bar" style="width:75%"></div></div>
+            <div class="xp-track"><div class="xp-fill" id="arena-xp-bar" style="width: 75%;"></div></div>
           </div>
         </div>
       </div>
 
-      <div class="card code-block" id="arena-code"><pre style="white-space:pre-wrap;line-height:1.8"><span class="code-kw">const</span> fruits = [<span class="code-str">'apple'</span>, <span class="code-str">'banana'</span>, <span class="code-str">'cherry'</span>];
+      <div class="card code-block" id="arena-code"><pre style="white-space:pre-wrap;line-height:1.8"><span class="code-kw">const</span> frutas = [<span class="code-str">'maça'</span>, <span class="code-str">'banana'</span>, <span class="code-str">'cereja'</span>];
 
-fruits.<input autocomplete="off" data-testid="input-code-gap" placeholder="" style="width:8ch" data-expected="forEach" class="code-input" id="code-gap">(fruit <span class="code-fn">=&gt;</span> {
-  console.<span class="code-fn">log</span>(fruit);
+frutas.<input id="code-gap" class="code-input" data-expected="forEach" style="width:8ch" placeholder="____" data-testid="input-code-gap" autocomplete="off">(fruta <span class="code-fn">=&gt;</span> {
+  console.<span class="code-fn">log</span>(fruta);
 });</pre></div>
 
       <div class="options-row" id="arena-options">
-    <button class="opt-btn" data-testid="btn-option-map" onclick="selectOption('map')">map</button>
-  
-    <button class="opt-btn" data-testid="btn-option-forEach" onclick="selectOption('forEach')">forEach</button>
-  
-    <button class="opt-btn" data-testid="btn-option-reduce" onclick="selectOption('reduce')">reduce</button>
-  
-    <button class="opt-btn" data-testid="btn-option-filter" onclick="selectOption('filter')">filter</button>
-  </div>
+<button class="opt-btn" data-testid="btn-option-map" onclick="selectOption('map')">map</button>
+
+<button class="opt-btn" data-testid="btn-option-forEach" onclick="selectOption('forEach')">forEach</button>
+
+<button class="opt-btn" data-testid="btn-option-reduce" onclick="selectOption('reduce')">reduce</button>
+
+<button class="opt-btn" data-testid="btn-option-filter" onclick="selectOption('filter')">filter</button>
+</div>
 
       <div class="arena-actions">
         <div class="progress-dots" id="arena-dots"><div class="progress-dot current"></div><div class="progress-dot "></div><div class="progress-dot "></div></div>
         <div style="display:flex;align-items:center;gap:14px">
-          <div class="feedback-msg hidden" id="arena-feedback"></div>
+          <div class="feedback-msg feedback-success hidden" id="arena-feedback">+50 XP — Correto!</div>
           <button class="btn-primary" id="btn-verify" onclick="verifyCode()">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
             Verificar Código
@@ -836,10 +847,10 @@ fruits.<input autocomplete="off" data-testid="input-code-gap" placeholder="" sty
     </div>
   </div>
 
-  <!-- ======== PAGE: PROFILE ======== -->
-  <div id="page-profile" class="page">
+  <!-- ======== PÁGINA: PERFIL ======== -->
+  <div id="page-profile" class="page active">
     <div class="profile-grid">
-      <!-- Left column -->
+      <!-- Coluna da esquerda -->
       <div style="display:flex;flex-direction:column;gap:22px">
         <div class="card profile-card">
           <div class="avatar-lg">
@@ -874,7 +885,7 @@ fruits.<input autocomplete="off" data-testid="input-code-gap" placeholder="" sty
         </div>
       </div>
 
-      <!-- Right column -->
+      <!-- Coluna da direita -->
       <div style="display:flex;flex-direction:column;gap:28px">
         <section>
           <h3 class="section-title" style="font-size:20px;margin-bottom:18px">
@@ -925,7 +936,7 @@ fruits.<input autocomplete="off" data-testid="input-code-gap" placeholder="" sty
     </div>
   </div>
 
-  <!-- ======== PAGE: LEADERBOARD ======== -->
+  <!-- ======== PÁGINA: CLASSIFICACAO ======== -->
   <div id="page-leaderboard" class="page">
     <div class="lb-header">
       <div class="lb-icon-wrap">
@@ -1072,11 +1083,11 @@ fruits.<input autocomplete="off" data-testid="input-code-gap" placeholder="" sty
 </div><!-- /main -->
 
 <!-- ======================== TOAST ======================== -->
-<div id="toast"></div>
+<div id="toast" class="error">Preencha o campo antes de verificar!</div>
 
 <script>
 /* ============================================================
-   ROUTER
+   ROTEADOR
    ============================================================ */
 function navigate(page, linkEl) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -1088,7 +1099,7 @@ function navigate(page, linkEl) {
 }
 
 /* ============================================================
-   QUEST DATA
+   DADOS DE QUEST
    ============================================================ */
 const quests = [
   { id:'py-vars',  title:'Python: Data & Variáveis', lang:'Python', diff:'Beginner', img:'python-quest.png', color:'#1a2e1a', glow:'#10B981' },
@@ -1122,12 +1133,12 @@ function renderQuests() {
 }
 
 /* ============================================================
-   ARENA / CHALLENGE ENGINE
+   ARENA / MOTOR DE DESAFIO
    ============================================================ */
 const challenges = [
   {
     id:'js-1', title:'Array Iteration', lang:'JavaScript',
-    html: `<span class="code-kw">const</span> fruits = [<span class="code-str">'apple'</span>, <span class="code-str">'banana'</span>, <span class="code-str">'cherry'</span>];\n\nfruits.<input id="code-gap" class="code-input" data-expected="forEach" style="width:8ch" placeholder="____" data-testid="input-code-gap" autocomplete="off" />(fruit <span class="code-fn">=&gt;</span> {\n  console.<span class="code-fn">log</span>(fruit);\n});`,
+    html: `<span class="code-kw">const</span> frutas = [<span class="code-str">'maça'</span>, <span class="code-str">'banana'</span>, <span class="code-str">'cereja'</span>];\n\nfrutas.<input id="code-gap" class="code-input" data-expected="forEach" style="width:8ch" placeholder="____" data-testid="input-code-gap" autocomplete="off" />(fruta <span class="code-fn">=&gt;</span> {\n  console.<span class="code-fn">log</span>(fruta);\n});`,
     options: ['map','forEach','reduce','filter'],
     xp: 50
   },
@@ -1165,27 +1176,27 @@ function renderChallenge() {
 
   updateXPDisplay();
 
-  // Code block
-  document.getElementById('arena-code').innerHTML = `<pre style="white-space:pre-wrap;line-height:1.8">${ch.html}</pre>`;
+ // Bloco de código
+document.getElementById('arena-code').innerHTML = `<pre style="white-space:pre-wrap;line-height:1.8">${ch.html}</pre>`;
 
-  // Re-bind input Enter key
-  const inp = document.getElementById('code-gap');
-  if (inp) {
-    inp.addEventListener('keydown', e => { if (e.key === 'Enter') verifyCode(); });
-  }
+// Reatribuir a tecla Enter
+const inp = document.getElementById('code-gap');
+if (inp) {
+inp.addEventListener('keydown', e => { if (e.key === 'Enter') verifyCode(); });
+}
 
-  // Options
-  document.getElementById('arena-options').innerHTML = ch.options.map(o => `
-    <button class="opt-btn" data-testid="btn-option-${o}" onclick="selectOption('${o}')">${o}</button>
-  `).join('');
+// Opções
+document.getElementById('arena-options').innerHTML = ch.options.map(o => `
+<button class="opt-btn" data-testid="btn-option-${o}" onclick="selectOption('${o}')">${o}</button>
+`).join('');
 
-  // Progress dots
-  document.getElementById('arena-dots').innerHTML = challenges.map((_,i) =>
-    `<div class="progress-dot ${i < currentChallenge ? 'done' : i === currentChallenge ? 'current' : ''}"></div>`
-  ).join('');
+// Pontos de progresso
+document.getElementById('arena-dots').innerHTML = challenges.map((_,i) =>
+`<div class="progress-dot ${i < currentChallenge ? 'done' : i === currentChallenge ? 'current' : ''}"></div>`
+).join('');
 
-  // Button states
-  showBtn('verify'); hideFeedback();
+// Estados dos botões
+showBtn('verify'); hideFeedback();
 }
 
 function selectOption(val) {
@@ -1256,7 +1267,7 @@ function showFeedback(type, msg) {
 function hideFeedback() { document.getElementById('arena-feedback').classList.add('hidden'); }
 
 /* ============================================================
-   LEADERBOARD DATA
+   DADOS DE CLASSIFICACAO
    ============================================================ */
 const players = [
   { rank:1,  name:'NullPointer',       lvl:42, xp:42000, streak:30, me:false },
@@ -1308,9 +1319,9 @@ renderLeaderboard();
 </script>
 
 
-<!-- Code injected by live-server -->
+<!-- Código injetado pelo servidor em live-server\tempo real -->
 <script>
-	// <![CDATA[  <-- For SVG support
+	// <![CDATA[  <-- Para suporte a SVG
 	if ('WebSocket' in window) {
 		(function () {
 			function refreshCSS() {
@@ -1346,9 +1357,9 @@ renderLeaderboard();
 	}
 	// ]]>
 </script>
-<!-- Code injected by live-server -->
+<!-- Código injetado pelo servidor em live-server\tempo real -->
 <script>
-	// <![CDATA[  <-- For SVG support
+	// <![CDATA[  <-- Para suporte a SVG
 	if ('WebSocket' in window) {
 		(function () {
 			function refreshCSS() {
@@ -1384,9 +1395,237 @@ renderLeaderboard();
 	}
 	// ]]>
 </script>
-<!-- Code injected by live-server -->
+<!-- Código injetado pelo servidor em live-server\tempo real -->
 <script>
-	// <![CDATA[  <-- For SVG support
+	// <![CDATA[  <-- Para suporte a SVG
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+<!-- Código injetado pelo servidor em live-server\tempo real -->
+<script>
+	// <![CDATA[  <-- Para suporte a SVG
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+<!-- Código injetado pelo servidor em live-server\tempo real -->
+<script>
+	// <![CDATA[  <-- Para suporte a SVG
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+<!-- Código injetado pelo servidor em live-server\tempo real -->
+<script>
+	// <![CDATA[  <-- Para suporte a SVG
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Atualize seu navegador. Este navegador NÃO é compatível com WebSocket para recarregamento em tempo real.');
+	}
+	// ]]>
+</script>
+<!-- Código injetado pelo servidor em live-server\tempo real -->
+<script>
+	// <![CDATA[  <-- Para suporte a SVG
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+<!-- Código injetado pelo servidor em live-server\tempo real -->
+<script>
+	// <![CDATA[  <-- Para suporte a SVG
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+<!-- Código injetado pelo servidor em live-server\tempo real -->
+<script>
+	// <![CDATA[  <-- Para suporte a SVG
 	if ('WebSocket' in window) {
 		(function () {
 			function refreshCSS() {
